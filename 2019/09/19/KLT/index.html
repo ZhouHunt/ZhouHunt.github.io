@@ -7,17 +7,17 @@
   
   <title>KLT | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)使用条件： 亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为$\epsilon$$$\epsilon = \int\int_w[J(\boldsymbol x)-I(\boldsy">
+  <meta name="description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking) 使用条件：  亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为\(\epsilon\) \[\epsilon = \int\int_w[J(\boldsymbol">
 <meta property="og:type" content="article">
 <meta property="og:title" content="KLT">
 <meta property="og:url" content="http://yoursite.com/2019/09/19/KLT/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)使用条件： 亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为$\epsilon$$$\epsilon = \int\int_w[J(\boldsymbol x)-I(\boldsy">
+<meta property="og:description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking) 使用条件：  亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为\(\epsilon\) \[\epsilon = \int\int_w[J(\boldsymbol">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2019-09-19T02:58:33.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="KLT">
-<meta name="twitter:description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)使用条件： 亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为$\epsilon$$$\epsilon = \int\int_w[J(\boldsymbol x)-I(\boldsy">
+<meta name="twitter:description" content="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking) 使用条件：  亮度恒定。 时间连续或者运动位移小。 空间一致性，邻近点有相似运动，保持相邻。  定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为\(\epsilon\) \[\epsilon = \int\int_w[J(\boldsymbol">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -86,22 +86,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="光流跟踪KLT-Kanade-Lucas-Tomasi-Tracking"><a href="#光流跟踪KLT-Kanade-Lucas-Tomasi-Tracking" class="headerlink" title="光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)"></a>光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)</h1><h2 id="使用条件："><a href="#使用条件：" class="headerlink" title="使用条件："></a>使用条件：</h2><ol>
+        <h1 id="光流跟踪kltkanade-lucas-tomasi-tracking">光流跟踪KLT(Kanade-Lucas-Tomasi Tracking)</h1>
+<h2 id="使用条件">使用条件：</h2>
+<ol type="1">
 <li>亮度恒定。</li>
 <li>时间连续或者运动位移小。</li>
 <li>空间一致性，邻近点有相似运动，保持相邻。</li>
 </ol>
-<p>定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为$\epsilon$<br>$$\epsilon = \int\int_w[J(\boldsymbol x)-I(\boldsymbol x-\boldsymbol d)]^2w(\boldsymbol x)d\boldsymbol x$$<br>坐标改写为<br>$$\epsilon = \int\int_w[J(\boldsymbol x+\frac{\boldsymbol  d}{2})-I(\boldsymbol x-\frac{\boldsymbol  d}{2}]^2w(\boldsymbol x)d\boldsymbol x$$<br>为了得到最佳匹配，使得$\epsilon$最小，令上式导数为0，求取极小值。<br>$$\frac{\partial\epsilon}{\partial\boldsymbol d} = 2\int\int_w[J(\boldsymbol x+\frac{\boldsymbol d}{2})-I(\boldsymbol x-\frac{\boldsymbol  d}{2}][\frac{\partial\boldsymbol J(\boldsymbol x+\frac{\boldsymbol d}{2})}{\partial\boldsymbol d}-\frac{\partial\boldsymbol J(\boldsymbol x-\frac{\boldsymbol d}{2})}{\partial\boldsymbol d}]w(\boldsymbol x)d\boldsymbol x$$<br>化简得到<br>$$\frac{\partial\epsilon}{\partial\boldsymbol d} = \int\int_w[J(\boldsymbol x)-I(\boldsymbol x)+\boldsymbol g^T\boldsymbol d]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x=0$$<br>$$where: \quad \boldsymbol{g}=[\frac{\partial}{\partial \boldsymbol{x}}(\frac{\boldsymbol{I+J}}{2}) \quad \frac{\partial}{\partial \boldsymbol{y}}(\frac{\boldsymbol{I+J}}{2})]^T$$<br>为了找到偏移量$\boldsymbol d$，设置上式为0，求极小值。<br>$$\int\int_w[J(\boldsymbol x)-I(\boldsymbol x)]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x=-[\int\int_w\boldsymbol g^T\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x]\boldsymbol d$$<br>相当于求解方程：<br>$$ Z\boldsymbol d =\boldsymbol e$$<br>$Z$是2x2的矩阵<br>$$ Z= \int\int_w\boldsymbol g^T\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x $$<br>$\epsilon$是2x1的向量，是计算的残差<br>$$ \boldsymbol e = \int\int_w[I(\boldsymbol x)-J(\boldsymbol x)]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x$$<br>求解方程，不一定能得到精确解，可以利用牛顿迭代法求解，当残差小于一定阈值时，就认为得到了近似解。</p>
-<p>KLT对于图像中的目标，并不是目标框和跟踪框内的所有的点都求取偏移量，而是选择一些特征不变的角点（corners），可以不同的特征不变的角点作为跟踪点，比如SIFT、SURF、FAST、SUSAN、HARRIS等。</p>
-<hr>
-<h2 id="Reference："><a href="#Reference：" class="headerlink" title="Reference："></a>Reference：</h2><p><a href="https://www.youtube.com/watch?v=X5gqsQV5ewc" target="_blank" rel="noopener">Yutube: Object tracking and KLT tracker</a></p>
+<p>定义同一目标出现在两帧图像I、J中，如果图像中两点匹配，那么以这两点为中心，W为窗口存在极小的灰度平方差，定义为<span class="math inline">\(\epsilon\)</span> <span class="math display">\[\epsilon = \int\int_w[J(\boldsymbol x)-I(\boldsymbol x-\boldsymbol d)]^2w(\boldsymbol x)d\boldsymbol x\]</span> 坐标改写为 <span class="math display">\[\epsilon = \int\int_w[J(\boldsymbol x+\frac{\boldsymbol  d}{2})-I(\boldsymbol x-\frac{\boldsymbol  d}{2}]^2w(\boldsymbol x)d\boldsymbol x\]</span> 为了得到最佳匹配，使得<span class="math inline">\(\epsilon\)</span>最小，令上式导数为0，求取极小值。 <span class="math display">\[\frac{\partial\epsilon}{\partial\boldsymbol d} = 2\int\int_w[J(\boldsymbol x+\frac{\boldsymbol d}{2})-I(\boldsymbol x-\frac{\boldsymbol  d}{2}][\frac{\partial\boldsymbol J(\boldsymbol x+\frac{\boldsymbol d}{2})}{\partial\boldsymbol d}-\frac{\partial\boldsymbol J(\boldsymbol x-\frac{\boldsymbol d}{2})}{\partial\boldsymbol d}]w(\boldsymbol x)d\boldsymbol x\]</span> 化简得到 <span class="math display">\[\frac{\partial\epsilon}{\partial\boldsymbol d} = \int\int_w[J(\boldsymbol x)-I(\boldsymbol x)+\boldsymbol g^T\boldsymbol d]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x=0\]</span> <span class="math display">\[where: \quad \boldsymbol{g}=[\frac{\partial}{\partial \boldsymbol{x}}(\frac{\boldsymbol{I+J}}{2}) \quad \frac{\partial}{\partial \boldsymbol{y}}(\frac{\boldsymbol{I+J}}{2})]^T\]</span> 为了找到偏移量<span class="math inline">\(\boldsymbol d\)</span>，设置上式为0，求极小值。 <span class="math display">\[\int\int_w[J(\boldsymbol x)-I(\boldsymbol x)]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x=-[\int\int_w\boldsymbol g^T\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x]\boldsymbol d\]</span> 相当于求解方程： <span class="math display">\[ Z\boldsymbol d =\boldsymbol e\]</span> <span class="math inline">\(Z\)</span>是2x2的矩阵 <span class="math display">\[ Z= \int\int_w\boldsymbol g^T\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x \]</span> <span class="math inline">\(\epsilon\)</span>是2x1的向量，是计算的残差 <span class="math display">\[ \boldsymbol e = \int\int_w[I(\boldsymbol x)-J(\boldsymbol x)]\boldsymbol g(\boldsymbol x)w(\boldsymbol x)d\boldsymbol x\]</span> 求解方程，不一定能得到精确解，可以利用牛顿迭代法求解，当残差小于一定阈值时，就认为得到了近似解。</p>
+<p>KLT对于图像中的目标，并不是目标框和跟踪框内的所有的点都求取偏移量，而是选择一些特征不变的角点（corners），可以不同的特征不变的角点作为跟踪点，比如SIFT、SURF、FAST、SUSAN、HARRIS等。 **** ## Reference： <a href="https://www.youtube.com/watch?v=X5gqsQV5ewc" target="_blank" rel="noopener">Yutube: Object tracking and KLT tracker</a></p>
 <p><a href="https://blog.csdn.net/irobot_davinci/article/details/29635199" target="_blank" rel="noopener">KLT角点跟踪算法</a></p>
 <p><a href="https://juejin.im/post/5a6721bd518825733201c4a2#heading-9" target="_blank" rel="noopener">MarkDown 插入数学公式实验大集合</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/19/KLT/" data-id="ck0q3y7yw0000k4ugi54rg8vn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/09/19/KLT/" data-id="ck0qa6gek00019cug6iq0i1ei" class="article-share-link">Share</a>
       
       
     </footer>
@@ -111,9 +111,9 @@
 <nav id="article-nav">
   
   
-    <a href="/2019/09/18/test-hexo/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/09/18/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">test,hexo</div>
+      <div class="article-nav-title">Hello World</div>
     </a>
   
 </nav>
@@ -151,10 +151,6 @@
         
           <li>
             <a href="/2019/09/19/KLT/">KLT</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/18/test-hexo/">test,hexo</a>
           </li>
         
           <li>
